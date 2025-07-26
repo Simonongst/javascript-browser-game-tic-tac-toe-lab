@@ -28,9 +28,18 @@ const render = () => {
 
 };
 
-const updateBoard = () => {
-    
+const updateBoard = (cell, idx) => {
+  board.forEach((cell, idx) => {
+    if (cell === 'X') {
+      squareEls[idx].textContent = 'X';
+    } else if (cell === 'O') {
+      squareEls[idx].textContent = 'O';
+    } else {
+      squareEls[idx].textContent = '';
+    }
+  });
 };
+
 
 /*----------------------------- Event Listeners -----------------------------*/
 
