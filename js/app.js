@@ -1,47 +1,130 @@
 /*-------------------------------- Constants --------------------------------*/
-const board = ['', '', '', '', '', '', '', '', '',];
-
+const winningCombos = [
+  [0, 1, 2],
+  [3, 4, 5],
+  [6, 7, 8],
+  [0, 3, 6],
+  [1, 4, 7],
+  [2, 5, 8],
+  [0, 4, 8],
+  [2, 4, 6],
+];
 
 /*---------------------------- Variables (state) ----------------------------*/
-let turn = 'X';
-let winner = false;
-let tie = false;
-
+let board;
+let turn;
+let winner;
+let tie;
 
 /*------------------------ Cached Element References ------------------------*/
-const squareEls = document.querySelector('.sqr');
+const squareEls = document.querySelectorAll('.sqr');
 const messageEl = document.querySelector('#message');
-
-console.log(squareEls);
-console.log(messageEl);
-
+const resetBtnEl = document.querySelector('#reset');
 
 /*-------------------------------- Functions --------------------------------*/
-const init = () => {
-    
-    render();
+const placePiece = (index) => {
+  board[index] = turn;
 };
 
-init()
+const checkForTie = () => {
+  if (winner) {
+    return;
+  }
 
-const render = () => {
-
+  if (!board.includes('')) {
+    tie = true;
+  }
 };
 
-const updateBoard = (cell, idx) => {
-  board.forEach((cell, idx) => {
+const checkForWinner = () => {
+  if (
+    (board[0] !== '' && board[0] === board[1] && board[0] === board[2]) ||
+    (board[3] !== '' && board[3] === board[4] && board[3] === board[5]) ||
+    (board[6] !== '' && board[6] === board[7] && board[6] === board[8]) ||
+    (board[0] !== '' && board[0] === board[3] && board[0] === board[6]) ||
+    (board[1] !== '' && board[1] === board[4] && board[1] === board[7]) ||
+    (board[2] !== '' && board[2] === board[5] && board[2] === board[8]) ||
+    (board[0] !== '' && board[0] === board[4] && board[0] === board[8]) ||
+    (board[2] !== '' && board[2] === board[4] && board[2] === board[6])
+  ) {
+    winner = true;
+  }
+};
+
+const switchPlayerTurn = () => {
+  if (winner) {
+    return;
+  }
+  if (turn === 'X') {
+    turn = 'O';
+  } else {
+    turn = 'X';
+  }
+};
+
+
+const updateBoard = () => {
+  board.forEach((cell, index) => {
     if (cell === 'X') {
-      squareEls[idx].textContent = 'X';
+      squareEls[index].textContent = 'X';
     } else if (cell === 'O') {
-      squareEls[idx].textContent = 'O';
+      squareEls[index].textContent = 'O';
     } else {
-      squareEls[idx].textContent = '';
+      squareEls[index].textContent = '';
     }
   });
 };
 
+const updateMessage = () => {
+  if (!winner && !tie) {
+    if (turn === 'X') {
+      messageEl.textContent = "It's X's turn";
+    } else {
+      messageEl.textContent = "It's O's turn";
+    }
+  } else if (!winner && tie) {
+    messageEl.textContent = 'Tie game!';
+  } else {
+    if (turn === 'X') {
+      messageEl.textContent = 'X wins!';
+    } else {
+      messageEl.textContent = 'O wins!';
+    }
+  }
+};
+
+const render = () => {
+  updateBoard();
+  updateMessage();
+};
+
+const handleClick = (evt) => {
+  const sqIdx = evt.target.id;
+  const squareIsFull = board[sqIdx] !== '';
+  if (squareIsFull || winner) {
+    return;
+  }
+
+  placePiece(sqIdx);
+  checkForWinner();
+  checkForTie();
+  switchPlayerTurn();
+  render();
+};
+
+const init = () => {
+  board = ['', '', '', '', '', '', '', '', ''];
+  turn = 'X';
+  winner = false;
+  tie = false;
+  render();
+};
+
+init();
 
 /*----------------------------- Event Listeners -----------------------------*/
-
-
+squareEls.forEach((square) => {
+  square.addEventListener('click', handleClick);
+});
+resetBtnEl.addEventListener('click', init);
 

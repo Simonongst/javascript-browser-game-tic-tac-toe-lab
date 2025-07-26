@@ -1,21 +1,39 @@
 body {
   background-color: gainsboro;
-  /* Use a system font, if none are available use an available sans-sarif */
   font-family: system-ui, sans-serif;
   text-align: center;
+  margin: 0;
+  padding-top: 20px;
+}
+
+h1,
+h2 {
+  margin: 10px 0;
 }
 
 .board {
-  display: flex;
-  flex-wrap: wrap;
-  width: 325px;
-  margin: 0 auto;
+  width: 350px;
+  margin: 20px auto;
 }
 
 .sqr {
-  width: 30%;
-  aspect-ratio: 1/1;
-  border: 3px solid black;
+  width: 100px;
+  height: 100px;
+  display: inline-block;
+  border: 2px solid black;
   font-size: 64px;
   text-align: center;
+  line-height: 100px;
+  vertical-align: top;
+  background-color: white;
+  margin: 5px 0;
+}
+
+button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: white;
+  border: 2px solid black;
+  cursor: pointer;
 }
